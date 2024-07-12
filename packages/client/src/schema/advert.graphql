@@ -1,0 +1,77 @@
+fragment Advert on Advert {
+  id
+  requisitionId
+  title
+  positionTitle
+  status
+  location
+  createdAt
+  sequence
+}
+
+fragment PartialAdvert on Advert {
+  id
+  requisitionId
+  title
+  positionTitle
+  status
+  location
+  createdAt
+  sequence
+  requisition {
+    id
+    title
+    endDate
+    workplace
+    employmentType
+    positionTitle
+    hierarchy
+    hiringDate
+    location
+    status
+    qualifications
+    responsibilities
+    experience
+    updatedAt
+    createdAt
+    sequence
+  }
+  questions {
+    ...Question
+  }
+}
+
+fragment FullAdvert on Advert {
+  id
+  requisitionId
+  title
+  positionTitle
+  status
+  location
+  createdAt
+  questions {
+    ...Question
+  }
+}
+
+query Adverts($input: AdvertFilter) {
+  adverts(input: $input) {
+    ...PartialAdvert
+  }
+}
+
+query Advert($id: ID!) {
+  advert(id: $id) {
+    ...FullAdvert
+  }
+}
+
+mutation UpdateAdvertStatus($input: UpdateAdvertStatusInput!) {
+  updateAdvertStatus(input: $input) {
+    ...Advert
+  }
+}
+
+mutation DeleteAdvert($id: ID!) {
+  deleteAdvert(id: $id)
+}

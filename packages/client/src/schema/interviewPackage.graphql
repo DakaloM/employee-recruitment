@@ -1,0 +1,43 @@
+fragment InterViewPackage on InterviewPackage {
+  id
+  jobId
+  date
+  time
+  location
+  description
+}
+
+fragment FullInterViewPackage on InterviewPackage {
+  id
+  jobId
+  date
+  time
+  location
+  description
+  questions{
+    id,
+    refId,
+    question,
+    type,
+    answer
+  }
+}
+
+
+query InterviewPackage($jobId: String!) {
+  interviewPackage(jobId: $jobId) {
+    ...FullInterViewPackage
+  }
+}
+
+mutation CreateInterviewPackage($input: CreateInterviewPackageInput!) {
+  createInterviewPackage(input: $input) {
+    ...InterViewPackage
+  }
+}
+
+mutation UpdateInterviewPackage($input: UpdateInterviewPackageInput!) {
+  updateInterviewPackage(input: $input) {
+    ...InterViewPackage
+  }
+}

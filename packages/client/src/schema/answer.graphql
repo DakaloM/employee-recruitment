@@ -1,0 +1,16 @@
+fragment Answer on Answer {
+    id
+    questionId
+    refId
+    applicantId
+    answer
+    question{
+       ...Question 
+    }
+}
+
+query Answers($applicantId: String!, $refId: String!) {
+  answers(applicantId: $applicantId, refId: $refId) {
+    ...Answer
+  }
+}

@@ -1,0 +1,965 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+scalar Date
+scalar EmailAddress
+scalar JSON
+"A user address"
+type Address {
+  "Address type"
+  addressType: AddressType!
+  city: String!
+  contactAddress: Boolean!
+  country: String!
+  "Creation date of the address"
+  createdAt: Date!
+  id: ID!
+  postalCode: String!
+  region: String!
+  streetAddress: String!
+  userId: String!
+}
+"An advert for a job position"
+type Advert implements HasQuestions & HasRequisition {
+  createdAt: Date!
+  id: ID!
+  location: String!
+  positionTitle: String!
+  questions: [Question!]!
+  "Requisition"
+  requisition: Requisition!
+  requisitionId: String!
+  sequence: Int!
+  "Advert status"
+  status: AdvertStatus!
+  title: String!
+}
+"Answer to a question"
+type Answer implements HasAnswerQuestion {
+  answer: String!
+  applicantId: String!
+  id: ID!
+  "List of job questions to match the answer"
+  question: Question!
+  questionId: String!
+  refId: String!
+}
+type Applicant implements HasAddress & HasAttachments & HasContact & HasEducation & HasExperience & HasUser {
+  "list of applicant addresses"
+  address: [Address!]!
+  applicantNumber: String!
+  attachments: [Attachment!]!
+  "list of applicant contact details"
+  contact: Contact!
+  "List of applicant education"
+  education: [Education!]!
+  "List of applicant education"
+  experience: [Experience!]!
+  id: ID!
+  name: String!
+  surname: String!
+  "User"
+  user: User!
+  userId: String!
+}
+type ApplicantsPayload {
+  "Whether there are more users"
+  hasNext: Boolean!
+  "List of entity"
+  items: [Applicant!]!
+  "Total number of objects"
+  total: Int!
+}
+"Job application submitted by an applicant"
+type Application implements HasApplicant & HasJob & HasRequisition & HasUser {
+  "Applicant"
+  applicant: Applicant!
+  applicantId: String!
+  "Creation date of the application"
+  createdAt: Date!
+  id: ID!
+  "Requisition"
+  job: Advert!
+  jobId: String!
+  jobTitle: String!
+  name: String!
+  "Requisition"
+  requisition: Requisition!
+  requisitionId: String!
+  sequence: Int!
+  "Application status"
+  status: ApplicationStatus!
+  surname: String!
+  "User"
+  user: User!
+}
+"An attachment to an object."
+type Attachment {
+  "The size of the attachment in bytes."
+  contentLength: Int!
+  "The content type of the attachment."
+  contentType: String!
+  "The creation date of the case"
+  createdAt: Date!
+  "The description rendered to text of the attachment."
+  description: String
+  "The URL to download the attachment."
+  downloadUrl: String!
+  id: ID!
+  "The name of the attachment."
+  name: String!
+  refId: String!
+  sequence: Int!
+  "The state of the attachment."
+  state: AttachmentState!
+  "The type of the attachment"
+  type: AttachmentType!
+  "The URL to upload the attachment."
+  uploadUrl: String!
+  "Versions of the attachment."
+  versions: [AttachmentVersion!]!
+}
+"A version of an attachment."
+type AttachmentVersion {
+  "The ID of the attachment."
+  attachmentId: String!
+  "The name of the attachment."
+  attachmentName: String!
+  "The URL to download the attachment."
+  downloadUrl: String!
+  "The date and time when the version was created."
+  insertedAt: Date
+  "The version of the attachment."
+  version: String!
+  "The ID of the version."
+  versionId: String
+}
+"User contact details"
+type Contact {
+  businessNumber: String
+  email: String!
+  id: ID!
+  mobileNumber: String!
+  privateNumber: String
+  userId: String!
+}
+"Applicant's education details"
+type Education {
+  country: String!
+  "Education level"
+  educationLevel: EducationLevel!
+  "Education end date"
+  endDate: Date!
+  "Final grade passed"
+  finalGrade: FinalGrade!
+  id: ID!
+  institution: String!
+  location: String!
+  "Region"
+  region: Region!
+  "Education start date"
+  startDate: Date!
+  userId: String!
+}
+"A user work experience"
+type Experience {
+  country: String!
+  employer: String!
+  "Experience end date"
+  endDate: Date!
+  id: ID!
+  industry: String!
+  jobTitle: String!
+  "Region"
+  region: Region!
+  "Experience start date"
+  startDate: Date!
+  userId: String!
+  workContract: String!
+}
+"Interview details"
+type Interview {
+  applicantId: String!
+  applicationId: String!
+  date: Date!
+  description: String
+  id: ID!
+  jobId: String!
+  jobTitle: String!
+  location: String!
+  name: String!
+  sequence: Int!
+  status: InterviewStatus!
+  surname: String!
+  time: String!
+}
+"An interview package object"
+type InterviewPackage implements HasQuestions {
+  date: Date!
+  description: String!
+  id: ID!
+  jobId: ID!
+  location: String!
+  questions: [Question!]!
+  time: String!
+}
+type Mutation {
+  "Create address"
+  createAddress(input: CreateAddressInput!): Address!
+  "Create answers"
+  createAnswers(input: CreateAnswerInput!): [Answer!]!
+  "Create an application"
+  createApplication(input: CreateApplicationInput!): Application!
+  "Create user contact"
+  createContact(input: CreateContactInput!): Contact!
+  "Create education"
+  createEducation(input: CreateEducationInput!): Education!
+  "Create user work experience"
+  createExperience(input: CreateExperienceInput!): Experience!
+  "Schedule an interview with the applicant"
+  createInterview(input: CreateInterviewInput!): Interview!
+  "Create interview package for a job"
+  createInterviewPackage(input: CreateInterviewPackageInput!): InterviewPackage!
+  "Create job question"
+  createJobQuestion(input: CreateQuestionInput!): Question!
+  "Create a requisition for a job post"
+  createRequisition(input: CreateRequisitionInput!): Requisition!
+  "Add applicant to shortlist"
+  createShortlist(input: CreateShortlistInput!): Shortlist!
+  "Create a user"
+  createUser(input: CreateUserInput!): User!
+  deleteAdvert(id: ID!): JSON!
+  "Delete all notifications of a user"
+  deleteAllNotifications(input: ReadAllNotificationsInput!): Int!
+  deleteAttachment(id: ID!): Attachment!
+  "Delete education"
+  deleteEducation(id: ID!): Int!
+  "Delete questions"
+  deleteQuestion(id: ID!): Int!
+  deleteRequisition(id: ID!): JSON!
+  "Initiate forgot password flow"
+  forgotPassword(email: EmailAddress!): String!
+  "Authenticates a user"
+  login(email: String!, password: String!): Tokens!
+  "Reschedule an interview with the applicant"
+  reScheduleInterview(input: ReScheduleInterviewInput!): Interview!
+  "Mark all notifications as seen"
+  readAllNotifications(input: ReadAllNotificationsInput!): [Int!]!
+  "Complete forgot password flow"
+  recoverPassword(code: String!, email: EmailAddress!, password: String!): Tokens!
+  "Update address"
+  updateAddress(input: UpdateAddressInput!): Address!
+  "Update a requisition"
+  updateAdvertStatus(input: UpdateAdvertStatusInput!): Advert!
+  "Update application status"
+  updateApplicationStatus(input: UpdateApplicationStatusInput!): Application!
+  "Updates an attachment."
+  updateAttachment(input: UpdateAttachmentInput!): Attachment!
+  "Create user contact"
+  updateContact(input: UpdateContactInput!): Contact!
+  "Update education"
+  updateEducation(input: UpdateEducationInput!): Education!
+  "Update user work experience"
+  updateExperience(input: UpdateExperienceInput!): Experience!
+  "Update interview package"
+  updateInterviewPackage(input: UpdateInterviewPackageInput!): InterviewPackage!
+  "Schedule an interview with the applicant"
+  updateInterviewStatus(input: UpdateInterviewStatusInput!): Interview!
+  "Update job question"
+  updateJobQuestion(input: UpdateQuestionInput!): Question!
+  "update notification status"
+  updateNotificationStatus(input: UpdateNotificationStatusInput!): Notification!
+  "Update a requisition"
+  updateRequisition(input: UpdateRequisitionInput!): Requisition!
+  "Update a requisition status"
+  updateRequisitionStatus(input: UpdateRequisitionStatusInput!): Requisition!
+  "Update user"
+  updateUser(input: UpdateUserInput!): User!
+  "Uploads an attachment."
+  uploadAttachment(input: UploadAttachmentInput!): Attachment!
+}
+"A notification is a communication to notify any user about any updates in the system"
+type Notification {
+  "Notification category"
+  category: NotificationCategory!
+  "Creation date and time for each notification"
+  createdAt: Date!
+  id: ID!
+  message: String!
+  refId: String!
+  "Notification status"
+  status: NotificationStatus!
+  userId: String!
+}
+"Position"
+type Position {
+  id: ID!
+  location: String!
+  manager: JSON!
+  positionTitle: String!
+  qualifications: [String!]!
+}
+type Query {
+  "a single address"
+  address(id: ID!): Address!
+  "A single job advertisements"
+  advert(id: ID!): Advert!
+  "A list of job advertisements"
+  adverts(input: AdvertFilter): [Advert!]!
+  "applicant answers"
+  answers(applicantId: String!, refId: String!): [Answer!]!
+  "An applicant"
+  applicant(id: ID!): Applicant!
+  "An applicant by applicantNumber"
+  applicantByApplicantNumber(applicantNumber: String!): Applicant!
+  "An applicant by userId"
+  applicantByUserId(userId: String!): Applicant!
+  "A list of applicants"
+  applicants(limit: Int = 20, page: Int = 1): [Applicant!]!
+  "One application"
+  application(id: ID!): Application!
+  "List of application"
+  applications(input: ApplicationFilter): [Application!]!
+  attachment(id: ID!): Attachment!
+  "Get contact by its id"
+  contact(id: ID!): Contact!
+  "Education"
+  education(id: ID!): Education!
+  "Get single experience by id"
+  experience(id: ID!): Experience!
+  "Interview"
+  interview(id: ID!): Interview!
+  interviewPackage(jobId: String!): InterviewPackage!
+  "Interview list"
+  interviews(input: InterviewFilter): [Interview!]!
+  "Job questions"
+  jobQuestions(refId: String!): [Question!]!
+  "A user"
+  me: User!
+  "A list of user notifications"
+  notifications(input: NotificationFilter): [Notification!]!
+  "A list of vacant positions"
+  position(id: ID!): Position!
+  "A list of vacant positions"
+  positions: [Position!]!
+  "List of all questions"
+  questions: [Question!]!
+  "A list of job advertisements"
+  requisition(id: ID!): Requisition!
+  "A list of job requisitions"
+  requisitions(input: RequisitionFilter): [Requisition!]!
+  "one shortlisted applicant"
+  shortlist(id: ID!): Shortlist!
+  "list of shortlisted applicants"
+  shortlists(input: ShortlistFilter): [Shortlist!]!
+  "A user"
+  user(id: ID!): User!
+  "a single address"
+  userAddresses(userId: String!): [Address!]!
+  userAttachments: [Attachment!]!
+  "Get user contact details"
+  userContact: Contact!
+  "User education information"
+  userEducation: [Education!]!
+  "User experiences"
+  userExperiences(userId: String!): [Experience!]!
+  "List of users"
+  users(filter: UsersFilter, limit: Int = 20, page: Int = 1): UsersPayload!
+}
+"Job question"
+type Question {
+  answer: String!
+  createdAt: Date!
+  id: ID!
+  question: String!
+  refId: String!
+  type: String!
+  updatedAt: Date!
+}
+"requisition is any request to create an advert for open job position"
+type Requisition implements HasPosition {
+  "Creation date of the requisition"
+  createdAt: Date!
+  employmentType: EmploymentType!
+  "The end date of the requisition"
+  endDate: Date!
+  experience: Int!
+  "requisition hierarchy"
+  hierarchy: requisitionHierarchy!
+  "Desired hiring date"
+  hiringDate: Date!
+  id: ID!
+  location: String!
+  objectId: String!
+  "Position of the requisition"
+  position: Position!
+  positionTitle: String!
+  qualifications: [String!]!
+  responsibilities: [String!]!
+  sequence: Int!
+  "Requisition status"
+  status: RequisitionStatus!
+  title: String!
+  "Update date of the requisition"
+  updatedAt: Date!
+  workplace: WorkPlace!
+}
+"Shortlist details"
+type Shortlist {
+  applicantId: String!
+  applicationId: String!
+  id: ID!
+  jobId: String!
+  jobTitle: String!
+  name: String!
+  sequence: Int!
+  surname: String!
+}
+type Tokens {
+  accessToken: String!
+  expiresAt: String!
+  refreshToken: String!
+}
+"A user is an human user or bot that can interact with the system."
+type User {
+  applicantId: String
+  birthDate: Date
+  email: EmailAddress!
+  gender: String
+  id: ID!
+  idNumber: String!
+  middleName: String
+  name: String!
+  race: String
+  "The role of the user."
+  role: UserRole!
+  sequence: Int!
+  status: String!
+  surname: String!
+  title: String
+}
+type UsersPayload {
+  "Whether there are more users"
+  hasNext: Boolean!
+  "List of entity"
+  items: [User!]!
+  "Total number of objects"
+  total: Int!
+}
+interface HasAddress {
+  "list of applicant addresses"
+  address: [Address!]!
+}
+interface HasAnswerQuestion {
+  "List of job questions to match the answer"
+  question: Question!
+}
+interface HasApplicant {
+  "An applicant object"
+  applicant: Applicant!
+}
+interface HasAttachments {
+  "The list of the attachments of the object."
+  attachments: [Attachment!]!
+}
+interface HasContact {
+  "list of applicant contact details"
+  contact: Contact!
+}
+interface HasEducation {
+  "List of applicant education"
+  education: [Education!]!
+}
+interface HasExperience {
+  "List of applicant education"
+  experience: [Experience!]!
+}
+interface HasJob {
+  "Job object"
+  job: Advert!
+}
+interface HasPosition {
+  "List of vacant positions"
+  position: Position!
+}
+interface HasQuestions {
+  "List of job questions"
+  questions: [Question!]!
+}
+interface HasRequisition {
+  "A requisition the application belongs to"
+  requisition: Requisition!
+}
+interface HasUser {
+  "User object"
+  user: User!
+}
+interface UserHasAddress {
+  "list of user addresses"
+  address: [Address!]!
+}
+"Address type"
+enum AddressType {
+  Permanent
+  Temporal
+}
+"Status of the advert advertising a job position"
+enum AdvertStatus {
+  Closed
+  Open
+}
+"Application status"
+enum ApplicationStatus {
+  Approved
+  Created
+  Declined
+  ShortListed
+  Submitted
+}
+"Attachment state"
+enum AttachmentState {
+  COMPLETED
+  IN_PROGRESS
+}
+"Type of attachment"
+enum AttachmentType {
+  CertificateOrDiploma
+  CoverLetter
+  CriminalRecordDocument
+  NationalIdOrPassport
+  Other
+  ProofOfResidence
+  Resume
+}
+"Education type"
+enum EducationLevel {
+  HighSchool
+  PostGraduate
+  UnderGraduate
+}
+"Employment type"
+enum EmploymentType {
+  FullTime
+  PartTime
+}
+"Final grade"
+enum FinalGrade {
+  BachelorDegree
+  Certificate
+  Diploma
+  Doctorate
+  MastersDegree
+}
+"Gender"
+enum Gender {
+  Female
+  Male
+  NonBinary
+}
+"Interview status"
+enum InterviewStatus {
+  Cancelled
+  Rescheduled
+  Scheduled
+}
+"Notification category"
+enum NotificationCategory {
+  Application
+  Document
+  General
+  Requisition
+  UserAccount
+}
+"Notification status"
+enum NotificationStatus {
+  New
+  Seen
+}
+"Question type"
+enum QuestionType {
+  Interview
+  Job
+}
+"Race"
+enum Race {
+  African
+  Coloured
+  Indian
+  Other
+  White
+}
+"Region"
+enum Region {
+  EasternCape
+  FreeState
+  Gauteng
+  International
+  KwaZuluNatal
+  Limpopo
+  Mpumalanga
+  NorthWes
+  NorthernCape
+  WesternCape
+}
+"Requisition status"
+enum RequisitionStatus {
+  Approved
+  Declined
+  WaitingApproval
+}
+enum RoleFilter {
+  Admin
+  Applicant
+  Recruiter
+  SecretaryGeneral
+  SuperAdmin
+}
+"Title"
+enum Title {
+  Advocate
+  Dr
+  Miss
+  Mr
+  Mrs
+  Ms
+  Other
+  Prof
+  Rev
+}
+"TypeIdentifier"
+enum TypeIdentifier {
+  Address
+  Advert
+  Answer
+  Applicant
+  Application
+  Attachment
+  Contact
+  Document
+  Education
+  Experience
+  Interview
+  InterviewPackage
+  Manager
+  Notification
+  Position
+  Question
+  Requisition
+  Shortlist
+  User
+}
+"User role"
+enum UserRole {
+  Admin
+  Applicant
+  Recruiter
+  SecretaryGeneral
+  SuperAdmin
+}
+"User status"
+enum UserStatus {
+  Active
+  Deleted
+  Inactive
+  NotConfirmed
+  Suspended
+}
+"Work place"
+enum WorkPlace {
+  Hybrid
+  OnSite
+  Remote
+}
+"Requisition hierarchy"
+enum requisitionHierarchy {
+  Management
+  SkilledWorker
+  Trainee
+}
+input AdvertFilter {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+input AnswerArgs {
+  answer: String!
+  jobId: String!
+  questionId: String!
+}
+input ApplicationFilter {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+input CreateAddressInput {
+  addressType: AddressType!
+  city: String!
+  contactAddress: Boolean!
+  country: String!
+  postalCode: String!
+  region: String!
+  streetAddress: String!
+  userId: String!
+}
+input CreateAdvertInput {
+  location: String!
+  positionTitle: String!
+  requisitionId: String!
+  title: String!
+}
+input CreateAnswerInput {
+  answers: [AnswerArgs!]!
+  applicantId: String!
+}
+input CreateApplicationInput {
+  answers: [JobQuestionArgs!]!
+  jobId: String!
+  requisitionId: String!
+}
+input CreateContactInput {
+  businessNumber: String
+  email: String!
+  mobileNumber: String!
+  privateNumber: String
+  userId: String!
+}
+input CreateEducationInput {
+  country: String!
+  educationLevel: EducationLevel!
+  endDate: Date!
+  finalGrade: FinalGrade!
+  institution: String!
+  location: String!
+  region: Region!
+  startDate: Date!
+  userId: String!
+}
+input CreateExperienceInput {
+  country: String!
+  employer: String!
+  endDate: Date!
+  industry: String!
+  jobTitle: String!
+  region: Region!
+  startDate: Date!
+  userId: String!
+  workContract: String!
+}
+input CreateInterviewInput {
+  applicantId: String!
+  applicationId: String!
+  date: Date!
+  description: String!
+  jobId: String!
+  location: String!
+  time: String!
+}
+input CreateInterviewPackageInput {
+  date: Date!
+  description: String!
+  jobId: String!
+  location: String!
+  time: String!
+}
+input CreateQuestionInput {
+  answer: String!
+  question: String!
+  refId: String!
+  type: QuestionType!
+}
+input CreateRequisitionInput {
+  employmentType: EmploymentType!
+  endDate: Date!
+  experience: Int!
+  hierarchy: requisitionHierarchy!
+  hiringDate: Date!
+  objectId: String!
+  title: String!
+  workplace: WorkPlace!
+}
+input CreateShortlistInput {
+  applicantId: String!
+  applicationId: String!
+  jobId: String!
+}
+input CreateUserInput {
+  birthDate: Date!
+  email: String!
+  gender: Gender!
+  idNumber: String!
+  middleName: String
+  name: String!
+  race: Race!
+  role: UserRole!
+  status: UserStatus
+  surname: String!
+  title: Title!
+}
+input InterviewFilter {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+input JobQuestionArgs {
+  answer: String!
+  questionId: String!
+}
+input NotificationFilter {
+  category: String
+  limit: Int = 20
+  message: String
+  page: Int = 1
+}
+input PositionFilter {
+  search: String
+}
+input ReScheduleInterviewInput {
+  date: Date!
+  description: String
+  id: String!
+  location: String
+  time: String!
+}
+input ReadAllNotificationsInput {
+  ids: [String!]!
+}
+input RequisitionFilter {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+input ShortlistFilter {
+  limit: Int
+  page: Int
+  search: String
+}
+input UpdateAddressInput {
+  addressType: String
+  city: String
+  contactAddress: Boolean
+  country: String
+  id: String!
+  postalCode: String
+  region: String
+  streetAddress: String
+}
+input UpdateAdvertStatusInput {
+  id: String!
+  status: String!
+}
+input UpdateApplicationStatusInput {
+  id: String!
+  status: String!
+}
+"Input type for uploading an attachment."
+input UpdateAttachmentInput {
+  description: String
+  id: String!
+  type: AttachmentType
+}
+input UpdateContactInput {
+  businessNumber: String
+  email: String
+  id: String!
+  mobileNumber: String
+  privateNumber: String
+}
+input UpdateEducationInput {
+  country: String
+  educationLevel: EducationLevel
+  endDate: Date
+  finalGrade: FinalGrade
+  id: String!
+  institution: String
+  location: String
+  region: Region
+  startDate: Date
+}
+input UpdateExperienceInput {
+  country: String
+  employer: String
+  endDate: Date
+  id: String!
+  industry: String
+  jobTitle: String
+  region: Region!
+  startDate: Date
+  workContract: String
+}
+input UpdateInterviewPackageInput {
+  date: Date
+  description: String
+  id: String!
+  location: String
+  time: String
+}
+input UpdateInterviewStatusInput {
+  id: String!
+  status: InterviewStatus!
+}
+input UpdateNotificationStatusInput {
+  id: String!
+  status: String
+}
+input UpdateQuestionInput {
+  answer: String
+  id: String!
+  question: String
+}
+input UpdateRequisitionInput {
+  employmentType: EmploymentType
+  endDate: Date
+  experience: Int
+  hierarchy: requisitionHierarchy
+  hiringDate: Date
+  id: String!
+  location: String
+  managerId: String
+  managerName: String
+  managerObjectId: String
+  managerSurname: String
+  positionTitle: String
+  qualifications: [String!]
+  responsibilities: [String!]
+  title: String
+  workPlace: WorkPlace
+}
+input UpdateRequisitionStatusInput {
+  id: String!
+  status: String!
+}
+input UpdateUserInput {
+  birthDate: Date
+  email: String
+  gender: Gender
+  id: String!
+  idNumber: String
+  middleName: String
+  name: String
+  race: Race
+  role: UserRole
+  status: UserStatus
+  surname: String
+  title: Title
+}
+"Input type for uploading an attachment."
+input UploadAttachmentInput {
+  contentLength: Int!
+  contentType: String!
+  description: String
+  name: String!
+  refId: String!
+  refTypeIdentifier: String!
+  type: AttachmentType!
+}
+input UsersFilter {
+  name: String
+  notRole: RoleFilter
+  role: RoleFilter
+}
+"Exposes a URL that specifies the behavior of this scalar."
+directive @specifiedBy(
+    "The URL that specifies the behavior of this scalar."
+    url: String!
+  ) on SCALAR

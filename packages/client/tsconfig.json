@@ -1,0 +1,12 @@
+{
+  "extends": "@erecruitment/ts/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "@gen/*": ["src/__generated__/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build"]
+}

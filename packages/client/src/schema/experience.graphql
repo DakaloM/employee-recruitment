@@ -1,0 +1,36 @@
+fragment Experience on Experience {
+  id
+  userId
+  employer
+  startDate
+  endDate
+  country
+  region
+  industry
+  jobTitle
+  workContract
+}
+
+query Experience($id: ID!){
+  experience(id: $id){
+    ...Experience
+  }
+}
+
+query UserExperiences($userId: String!){
+  userExperiences(userId: $userId){
+    ...Experience
+  }
+}
+
+mutation CreateExperience($input: CreateExperienceInput!){
+  createExperience(input: $input){
+    ...Experience
+  }
+}
+
+mutation UpdateExperience($input: UpdateExperienceInput!){
+  updateExperience(input: $input){
+    ...Experience
+  }
+}

@@ -1,0 +1,75 @@
+fragment Application on Application {
+  id
+  status
+  createdAt
+  jobTitle,
+  name,
+  surname,
+  sequence
+  
+}
+
+fragment FullApplication on Application {
+  id
+  applicantId
+  requisitionId
+  status
+  createdAt
+  requisition {
+    id
+    title
+    endDate
+    workplace
+    employmentType
+    positionTitle
+    hierarchy
+    hiringDate
+    location
+    status
+    qualifications
+    responsibilities
+    experience
+    updatedAt
+    createdAt
+    sequence
+  }
+  job{
+    ...Advert
+  }
+
+  user {
+    id
+    email
+    title
+    name
+    surname
+    middleName
+    gender
+    race
+    idNumber
+  }
+}
+
+query Applications($input: ApplicationFilter) {
+  applications(input: $input) {
+    ...Application
+  }
+}
+
+query Application($id: ID!) {
+  application(id: $id) {
+    ...FullApplication
+  }
+}
+
+mutation CreateApplication($input: CreateApplicationInput!) {
+  createApplication(input: $input) {
+    id
+  }
+}
+
+mutation UpdateApplicationStatus($input: UpdateApplicationStatusInput!) {
+  updateApplicationStatus(input: $input) {
+    id
+  }
+}

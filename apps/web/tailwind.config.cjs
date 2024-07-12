@@ -1,0 +1,1 @@
+module.exports = require('@erecruitment/ui/tailwind.config.cjs');

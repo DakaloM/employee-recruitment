@@ -1,0 +1,100 @@
+fragment Applicant on Applicant {
+  id
+  userId
+  applicantNumber
+  name
+  surname
+  user {
+    id
+    status
+    email
+    title
+    name
+    surname
+    middleName
+    gender
+    race
+    idNumber
+  }
+}
+
+fragment FullApplicant on Applicant {
+  id
+  userId
+  applicantNumber
+  name
+  surname
+  user {
+    id
+    name
+    middleName
+    surname
+    email
+    title
+    idNumber
+    birthDate
+    role
+    status
+    sequence
+    race
+    applicantId
+    gender
+  }
+  education {
+    id
+    userId
+    institution
+    startDate
+    endDate
+    country
+    region
+    location
+    educationLevel
+    finalGrade
+  }
+  experience {
+    id
+    employer
+    startDate
+    endDate
+    country
+    region
+    industry
+    jobTitle
+    workContract
+  }
+  address {
+    id
+    addressType
+    streetAddress
+    country
+    city
+    region
+    postalCode
+    contactAddress
+  }
+  contact {
+    ...Contact
+  }
+  attachments {
+    ...FullAttachment
+  }
+}
+
+query Applicants($page: Int, $limit: Int) {
+  applicants(limit: $limit, page: $page) {
+    ...Applicant
+  }
+}
+
+query Applicant($id: ID!) {
+  applicant(id: $id) {
+    ...FullApplicant
+  }
+}
+
+query UserApplicant($userId: String!) {
+  applicantByUserId(userId: $userId) {
+    ...FullApplicant
+  }
+}

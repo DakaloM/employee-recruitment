@@ -1,0 +1,35 @@
+fragment Question on Question {
+  id
+  refId
+  question
+  answer
+}
+
+query Questions{
+  questions{
+    ...Question
+  }
+}
+
+query JobQuestions($refId: String!){
+  jobQuestions(refId: $refId) {
+    ...Question
+  }
+}
+
+mutation CreateQuestion($input: CreateQuestionInput!){
+  createJobQuestion(input: $input) {
+    ...Question
+  }
+}
+
+mutation DeleteQuestion($id: ID!){
+  deleteQuestion(id: $id) 
+}
+
+
+mutation UpdateQuestion($input: UpdateQuestionInput!){
+  updateJobQuestion(input: $input) {
+    ...Question
+  }
+}

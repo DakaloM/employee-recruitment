@@ -1,0 +1,19 @@
+fragment Position on Position {
+  id
+  manager
+  positionTitle
+  location
+  qualifications
+}
+
+query Positions{
+  positions{
+    ...Position
+  }
+}
+
+query Position($id: ID!){
+  position(id: $id){
+    ...Position
+  }
+}

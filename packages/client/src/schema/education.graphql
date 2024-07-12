@@ -1,0 +1,40 @@
+fragment Education on Education {
+  id
+  userId
+  institution
+  startDate
+  endDate
+  country
+  region
+  location
+  educationLevel
+  finalGrade
+}
+
+query Education($id: ID!){
+  education(id: $id){
+    ...Education
+  }
+}
+
+query UserEducation{
+  userEducation{
+    ...Education
+  }
+}
+
+mutation CreateEducation($input: CreateEducationInput!){
+  createEducation(input: $input){
+    ...Education
+  }
+}
+
+mutation UpdateEducation($input: UpdateEducationInput!){
+  updateEducation(input: $input){
+    ...Education
+  }
+}
+
+mutation DeleteEducation($id: ID!){
+  deleteEducation(id: $id)
+}

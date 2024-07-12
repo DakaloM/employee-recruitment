@@ -1,0 +1,37 @@
+fragment Address on Address {
+  id
+  userId
+  addressType
+  streetAddress
+  country
+  city
+  region
+  postalCode
+  contactAddress
+
+}
+
+query Address($id: ID!){
+  address(id: $id){
+    ...Address
+  }
+}
+
+query UserAddresses($userId: String!){
+  userAddresses(userId: $userId){
+    ...Address
+  }
+}
+
+mutation CreateAddress($input: CreateAddressInput!){
+  createAddress(input: $input){
+    ...Address
+  }
+}
+
+mutation UpdateAddress($input: UpdateAddressInput!){
+  updateAddress(input: $input){
+    ...Address
+  }
+}
+

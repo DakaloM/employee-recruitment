@@ -1,0 +1,26 @@
+fragment Contact on Contact {
+  id
+  userId
+  email
+  mobileNumber
+  businessNumber
+  privateNumber
+}
+
+query Contact($id: ID!) {
+  contact(id: $id) {
+    ...Contact
+  }
+}
+
+mutation CreateContact($input: CreateContactInput!) {
+  createContact(input: $input) {
+    id
+  }
+}
+
+mutation UpdateContact($input: UpdateContactInput!) {
+  updateContact(input: $input) {
+    ...Contact
+  }
+}

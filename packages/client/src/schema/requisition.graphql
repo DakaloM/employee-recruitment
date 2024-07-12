@@ -1,0 +1,66 @@
+fragment Requisition on Requisition {
+  id
+  objectId
+  positionTitle
+  hiringDate
+  location
+  endDate
+  status
+  sequence
+}
+
+fragment FullRequisition on Requisition {
+  id
+  objectId
+  title
+  endDate
+  workplace
+  employmentType
+  positionTitle
+  hierarchy
+  hiringDate
+  location
+  status
+  qualifications
+  responsibilities
+  experience
+  updatedAt
+  createdAt
+  sequence
+  position {
+    manager
+    positionTitle
+    location
+    qualifications
+  }
+}
+
+query Requisitions($input: RequisitionFilter) {
+  requisitions(input: $input) {
+    ...Requisition
+  }
+}
+
+query Requisition($id: ID!) {
+  requisition(id: $id) {
+    ...FullRequisition
+  }
+}
+
+mutation UpdateRequisition($input: UpdateRequisitionInput!) {
+  updateRequisition(input: $input) {
+    ...FullRequisition
+  }
+}
+
+mutation UpdateRequisitionStatus($input: UpdateRequisitionStatusInput!) {
+  updateRequisitionStatus(input: $input) {
+    id
+  }
+}
+
+mutation CreateRequisition($input: CreateRequisitionInput!) {
+  createRequisition(input: $input) {
+    id
+  }
+}

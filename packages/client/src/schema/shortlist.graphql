@@ -1,0 +1,29 @@
+
+fragment Shortlist on Shortlist {
+    id
+    applicationId
+    jobId
+    applicantId
+    name
+    surname
+    jobTitle
+    sequence
+}
+
+mutation CreateShortlist($input: CreateShortlistInput!) {
+  createShortlist(input: $input) {
+    id
+  }
+}
+
+query Shortlist($id: ID!) {
+  shortlist(id: $id) {
+    ...Shortlist
+  }
+}
+
+query Shortlists($input: ShortlistFilter) {
+  shortlists(input: $input) {
+    ...Shortlist
+  }
+}

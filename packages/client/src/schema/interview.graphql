@@ -1,0 +1,50 @@
+
+
+fragment Interview on Interview {
+    id
+    applicationId
+    jobId
+    jobTitle
+    applicantId
+    name
+    surname
+    date
+    time
+    location
+    status
+    description
+    sequence
+}
+
+mutation CreateInterview($input: CreateInterviewInput!) {
+  createInterview(input: $input) {
+    id
+  }
+}
+
+query Interview($id: ID!) {
+  interview(id: $id) {
+    ...Interview
+  }
+}
+
+query Interviews($input: InterviewFilter) {
+  interviews(input: $input) {
+    ...Interview
+  }
+}
+
+mutation ReScheduleInterview($input: ReScheduleInterviewInput!) {
+  reScheduleInterview(input: $input) {
+    ...Interview
+  }
+}
+
+
+mutation UpdateInterviewStatus($input: UpdateInterviewStatusInput!) {
+  updateInterviewStatus(input: $input) {
+    ...Interview
+  }
+}
+
+
