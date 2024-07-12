@@ -57,7 +57,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-action-technanimals-role
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/deployer
           aws-region: ${{ env.REGION }}
 
       - name: Deploy
@@ -66,11 +66,11 @@ jobs:
       - name: Run migrations
         if: ${{ env.STAGE == 'test' }}
         run: |
-          aws lambda invoke --function-name test-erecruitment-migration --invocation-type Event --payload '{ "mode": "MIGRATE" }' --region ${{ env.REGION }} migrate.json --cli-binary-format raw-in-base64-out
+          aws lambda invoke --function-name test-erec-migration --invocation-type Event --payload '{ "mode": "MIGRATE" }' --region ${{ env.REGION }} migrate.json --cli-binary-format raw-in-base64-out
       - name: Run Seeds
         if: ${{ env.STAGE == 'test' }}
         run: |
-          aws lambda invoke --function-name test-erecruitment-seed --invocation-type Event --payload '{}' --region ${{ env.REGION }} seed.json --cli-binary-format raw-in-base64-out
+          aws lambda invoke --function-name test-erec-seed --invocation-type Event --payload '{}' --region ${{ env.REGION }} seed.json --cli-binary-format raw-in-base64-out
 
 
           
